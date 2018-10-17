@@ -34,6 +34,21 @@ class tabuleiro():
 		self.grid[self.oito[1]-1][self.oito[0]-1] = 8
 
 
+	def atualiza_com_vazio(self, vazio_novo):
+		self.pecas = [self.um, self.dois, self.tres, self.quatro, self.cinco,\
+		self.seis, self.sete, self.oito]
+
+		self.grid[self.um[1]-1][self.um[0]-1] = 1
+		self.grid[self.dois[1]-1][self.dois[0]-1] = 2
+		self.grid[self.tres[1]-1][self.tres[0]-1] = 3
+		self.grid[self.quatro[1]-1][self.quatro[0]-1] = 4
+		self.grid[self.cinco[1]-1][self.cinco[0]-1] = 5
+		self.grid[self.seis[1]-1][self.seis[0]-1] = 6
+		self.grid[self.sete[1]-1][self.sete[0]-1] = 7
+		self.grid[self.oito[1]-1][self.oito[0]-1] = 8
+
+		self.grid[vazio_novo[1]][vazio_novo[0]] = 0
+		
 
 	def verifica_unico(self, posicao):
 		if posicao == self.um:
@@ -133,12 +148,75 @@ class tabuleiro():
 			elif peca[1] == peca_vazia[1]:
 				if peca[0] == peca_vazia[0] + 1 or peca[0] == peca_vazia[0] -1:
 					movimentos_possiveis.append(peca)
-		print movimentos_possiveis
+		return movimentos_possiveis
 
 
 	def gera_filhos(self):
+
 		peca_vazia = self.procura_vazio()
 		movimentos = self.possiveis_movimentos()
+		filhos = []
+		vazio_novo = []
+
+		for movimento in movimentos:
+			new_tabuleiro = tabuleiro()
+			if movimento == self.um:
+				new_tabuleiro.um = peca_vazia
+				vazio_novo = self.um
+			else:
+				new_tabuleiro.um = self.um
+
+			if movimento == self.dois:
+				new_tabuleiro.dois = peca_vazia
+				vazio_novo = self.dois
+			else:
+				new_tabuleiro.dois = self.dois
+
+			if movimento == self.tres:
+				new_tabuleiro.tres = peca_vazia
+				vazio_novo = self.tres
+			else:
+				new_tabuleiro.tres = self.tres
+
+			if movimento == self.quatro:
+				new_tabuleiro.quatro = peca_vazia
+				vazio_novo = self.quatro
+			else:
+				new_tabuleiro.quatro = self.quatro
+
+			if movimento == self.cinco:
+				new_tabuleiro.cinco = peca_vazia
+				vazio_novo = self.cinco
+			else:
+				new_tabuleiro.cinco = self.cinco
+
+			if movimento == self.seis:
+				new_tabuleiro.seis = peca_vazia
+				vazio_novo = self.seis
+			else:
+				new_tabuleiro.seis = self.seis
+
+			if movimento == self.sete:
+				new_tabuleiro.sete = peca_vazia
+				vazio_novo = self.sete
+			else:
+				new_tabuleiro.sete = self.sete
+
+			if movimento == self.oito:
+				new_tabuleiro.oito = peca_vazia
+				vazio_novo = self.oito
+			else:
+				new_tabuleiro.oito = self.oito
+
+			
+
+
+			new_tabuleiro.atualiza_pecas()
+			new_tabuleiro.custo = self.custo + 1
+			filhos.append(new_tabuleiro)
+
+		return filhos
+
 
 
 
@@ -210,13 +288,17 @@ class tabuleiro():
 
 
 
-tabuleiro = tabuleiro()
-tabuleiro.embaralha()
-tabuleiro.printa_tabuleiro()
-print tabuleiro.procura_vazio()
-tabuleiro.possiveis_movimentos()
-print tabuleiro.calcula_h1()
-print tabuleiro.calcula_h2()
+tabuleiro_init = tabuleiro()
+tabuleiro_init.embaralha()
+tabuleiro_init.printa_tabuleiro()
+print tabuleiro_init.procura_vazio()
+tabuleiro_init.possiveis_movimentos()
+print tabuleiro_init.calcula_h1()
+print tabuleiro_init.calcula_h2()
+filhos = tabuleiro_init.gera_filhos()
+for filho in filhos:
+	print "\n"
+	filho.printa_tabuleiro()
 
 
 
