@@ -1,8 +1,9 @@
 from random import seed
 from random import randrange
 import numpy
-from random import choice
+from random import choice, shuffle
 import random
+import time
 
 class tabuleiro():
 	def __init__(self):
@@ -18,6 +19,8 @@ class tabuleiro():
 		self.pecas = [self.um, self.dois, self.tres, self.quatro, self.cinco,\
 		self.seis, self.sete, self.oito]
 		self.custo = 0
+		self.objetivo = 0
+		self.pai = None
 
 
 	def atualiza_pecas(self):
@@ -156,7 +159,7 @@ class tabuleiro():
 		peca_vazia = self.procura_vazio()
 		movimentos = self.possiveis_movimentos()
 		filhos = []
-		vazio_novo = []
+		vazio_novo = [0,0]
 
 		for movimento in movimentos:
 			new_tabuleiro = tabuleiro()
@@ -209,7 +212,8 @@ class tabuleiro():
 				new_tabuleiro.oito = self.oito
 
 			
-
+			if vazio_novo == [0,0]:
+				new_tabuleiro.objetivo = 1
 
 			new_tabuleiro.atualiza_pecas()
 			new_tabuleiro.custo = self.custo + 1
@@ -288,17 +292,58 @@ class tabuleiro():
 
 
 
+def busca_astar(estado_inicial):
+	borda = {}
+	objetivo = 0
+	print "\n Iniciando a*"
+	nos = estado_inicial.gera_filhos()
+	expandido = estado_inicial
+	contador_expandidos = 0
+	valor = 0
+	while len(borda) != 0 or expandido.objetivo == 0:
+		aux = 9999
+		print "nos gerados " + str(len(nos))
+		print "tamanho borda " + str(len(borda))
+		print "Profundidade " + str(expandido.custo)
+		print "Contador expandidos " + str(contador_expandidos)
+		print "Expandido f(n) " + str(valor)
+		for no in nos:
+			borda[no] = abs(no.calcula_h2() + no.custo)
+		for key, value in borda.iteritems():
+			if value <= aux:
+				aux = value
+				expandido = key
+				valor = aux
+		del borda[expandido]
+		expandido.printa_tabuleiro()
+		nos = expandido.gera_filhos()
+		shuffle(nos)
+		contador_expandidos = contador_expandidos + 1
+
+
+		
+
+
+
+
+		
+	
+
+
 tabuleiro_init = tabuleiro()
 tabuleiro_init.embaralha()
 tabuleiro_init.printa_tabuleiro()
-print tabuleiro_init.procura_vazio()
-tabuleiro_init.possiveis_movimentos()
-print tabuleiro_init.calcula_h1()
-print tabuleiro_init.calcula_h2()
-filhos = tabuleiro_init.gera_filhos()
-for filho in filhos:
-	print "\n"
-	filho.printa_tabuleiro()
+time.sleep(5)
+#print tabuleiro_init.procura_vazio()
+#tabuleiro_init.possiveis_movimentos()
+#print tabuleiro_init.calcula_h1()
+#print tabuleiro_init.calcula_h2()
+#filhos = tabuleiro_init.gera_filhos()
+#for filho in filhos:
+#	print "\n"
+#	filho.printa_tabuleiro()
+busca_astar(tabuleiro_init)
+
 
 
 
